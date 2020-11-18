@@ -64,7 +64,9 @@ export default {
         return {
             signaturePad: null,
             config: {
+                zoom: 1,           //设置笔迹点缩放比例
                 penColor: "red",   //笔刷颜色
+                allowType: 'pen',  //允许pointerType mouse/pen/touch/‘’ default ''
                 minWidth: 1,       //最小宽度
                 maxWidth: 2,       //最大宽度
             }
@@ -74,6 +76,8 @@ export default {
         let _this = this
         let canvas = document.querySelector('.mycanvas')
         this.signaturePad = new SignaturePad(canvas, this.config)
+        this.signaturePad.onBegin = this.startWriting
+        this.signaturePad.onEnd = this.endWriting
         canvas.height = document.getElementById('question').clientHeight
         canvas.width = document.getElementById('question').clientWidth
 
@@ -95,6 +99,12 @@ export default {
         },
         clear () {
             this.signaturePad.clear()
+        },
+        startWriting () {
+            this.$refs.mycanvas.style.touchAction = 'none'
+        },
+        endWriting () {
+            this.$refs.mycanvas.style.touchAction = 'pan-y'
         }
     }
 }
